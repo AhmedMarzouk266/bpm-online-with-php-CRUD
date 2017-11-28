@@ -1,67 +1,25 @@
 <?php
 
-// Get cURL resource
-ob_start();
-ini_set('max_execution_time', 300);
+    require_once "config.php";
 
-$curl = curl_init();
-$baseUrl =
-'https://014100-sales-enterprise.bpmonline.com/0/ServiceModel/EntityDataService.svc/ContactCollection?select=Id';
+    BPM::getRecords('ContactCollection');
 
+    $contact = new BPM();
 
-curl_setopt_array($curl, array(
-    CURLOPT_USERPWD => 'Ahmed_Marzouk' . ":" .'Artorg123',
-    CURLOPT_RETURNTRANSFER => 1,
-    CURLOPT_URL => $baseUrl
-));
-// Send the request & save response to $resp
-$resp = curl_exec($curl);
-// Close request to clear up some resources
+    $contact->name='Test 24';
+    $contact->phone='000 000 000';
+    $contact->createRecord('ContactCollection');
 
-$file = 'testFile.xml';
-if($handle = fopen($file,'wt')){
-    fwrite($handle,$resp);
-    fclose($handle);
-}else{
-    echo "could not open the file";
-}
+    $guid='7dbe5aad-e7c8-4252-a81a-1660895d62db';
+    //a88baee0-ef60-4f4b-92c5-a48c58915221 // messi
+    //8a465f1c-6793-4e2d-99c9-b701fc7534fd // new post contact
+    BPM::deleteRecord('ContactCollection',$guid);
 
-
-curl_close($curl);
-
-$id='678835c2-6850-49f6-a1ba-33eae62396b1';
-$id_exists = checkId($id);
-if($id_exists){echo "true";}else{echo "false";};
-
-
-//echo gettype($resp)."<br/>";
-//var_dump($resp);
-
-function checkId($id){
-    // this function takes the id and search for the id in the recieved data
-    // if the id exists it return TRUE if not it returns FALSE.
-    if(strlen($id)!= 36){
-        return false;
-    }else{
-        $handle = fopen('testFile.xml', 'r');
-        $valid = false; // init as false
-        while (($buffer = fgets($handle)) !== false) {
-            if (strpos($buffer, $id) !== false) {
-                $valid = TRUE;
-                break; // Once you find the string, you should break out the loop.
-            }
-        }
-        fclose($handle);
-        return $valid;
-    }
-}
-
-
+    $contact2 = new BPM();
+    $contact2->guid ='4130dbdf-e0a9-415e-b795-417b30efb355';
+    $contact2->name='Updated oop contact';
+    $contact2->updateRecord('ContactCollection')
 
 
 ?>
 
-
-<!-- https://005419-marketing.bpmonline.com/0/ServiceModel/EntityDataService.svc/-->
-<!-- https://005419-marketing.bpmonline.com/0/ServiceModel/GeneratedObjectWebFormService.svc/SaveWebFormObjectData-->
-<!-- https://005419-marketing.bpmonline.com/0/ServiceModel/AuthService.svc/Login/-->
