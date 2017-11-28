@@ -8,9 +8,11 @@
 
 class BPM
 {
+    public $collection;
     public $name ;
     public $phone;
     public $guid ;
+
 
     public static function getRecords($collection)
     {
@@ -47,7 +49,7 @@ class BPM
 
     }
 
-    public function createRecord($collection)
+    private function createRecord()
     {
 
 
@@ -59,7 +61,7 @@ class BPM
             CURLOPT_HTTPHEADER => array('Content-Type:application/atom+xml;type=entry', 'Accept:application/atom+xml'),
             CURLOPT_POSTFIELDS => $contact_xml,
             CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_URL => URL . $collection,
+            CURLOPT_URL => URL . $this->collection,
 
         ));
 
@@ -69,8 +71,8 @@ class BPM
         echo "<pre>$result</pre>";
     }
 
-    public function updateRecord($collection){
-        $url = URL.$collection."(guid'{$this->guid}')";
+    private function updateRecord(){
+        $url = URL.$this->collection."(guid'{$this->guid}')";
         $contact_xml = $this->getXml();
         $ch = curl_init();
         curl_setopt_array($ch, array(
@@ -86,6 +88,15 @@ class BPM
         $result = curl_exec($ch);
         curl_close($ch);
         echo "<pre>$result</pre>";
+    }
+
+    public function saveRecord(){
+        $id_exists = self::checkId($this->guid);
+        if($id_exists){
+            $this->updateRecord();
+        }else{
+            $this->createRecord();
+        }
     }
 
     public static function deleteRecord($collection,$guid){
