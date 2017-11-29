@@ -27,20 +27,45 @@ class BPM
         ));
         // save results to $resp :
         $resp = curl_exec($curl);
-
-        // save results to XML file :
-        $file = 'resultsFile.xml';
-        if ($handle = fopen($file, 'wt')) {
-            fwrite($handle, $resp);
-            fclose($handle);
-        } else {
-            echo "could not open the file";
-        }
         curl_close($curl);
-
-        return $resp;
+        $resultArray = self::XMLtoArray($resp);
+        return $resultArray;
 
     }
+
+    public static function getRecordByGuid($collection,$guid){
+        $curl = curl_init();
+        $baseUrl = URL . $collection.'?$filter=Id+eq+guid'."'".$guid."'"; curl_setopt_array($curl, array(
+            CURLOPT_USERPWD => BPM_USER.":".BPM_PWD,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => $baseUrl
+        ));
+        // save results to $resp :
+        $resp = curl_exec($curl);
+        curl_close($curl);
+        $contentArray = BPM::XMLtoArray($resp);
+        return $contentArray;
+    }
+
+    public static function getContactNameAndIdByGuid($guid){
+        $contactRecord   = self::getRecordByGuid('ContactCollection',$guid);
+        $contact         = [];
+        $contact['name'] = $contactRecord['FEED']['ENTRY']['CONTENT']['M:PROPERTIES']['D:NAME'];
+        $contact['id']   = $contactRecord['FEED']['ENTRY']['CONTENT']['M:PROPERTIES']['D:ID']['content'];
+        return $contact;
+    }
+
+    public static function getContactData()
+    {
+        // i need an array of objects !
+        $contactsArray = BPM::getRecords('ContactCollection');
+        for ($i = 0; $i < count($contactsArray['FEED']['ENTRY']); $i++) {
+            $object[$i]['name'] = $contactsArray['FEED']['ENTRY'][$i]['CONTENT'][$i]['M:PROPERTIES'][$i]['D:NAME'];
+            $object[$i]['id']   = $contactsArray['FEED']['ENTRY'][$i]['CONTENT'][$i]['M:PROPERTIES'][$i]['D:ID']['content'];
+        }
+        return $object;
+    }
+
 
     private function createRecord()
     {

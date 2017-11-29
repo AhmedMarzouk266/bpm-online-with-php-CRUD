@@ -1,8 +1,7 @@
 <?php
 
     require_once "config.php";
-    $result       = BPM::getRecords('ContactCollection');
-    $contentArray = BPM::XMLtoArray($result);
+    $contentArray = BPM::getRecords('ContactCollection');
 
     // form handling !
 if(isset($_POST['name']) && isset($_POST['phone'])){
