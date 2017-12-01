@@ -8,13 +8,14 @@
 
 class Invoice extends BPM
 {
-    public $number;
+    public $number     = "";
     public $collection = 'InvoiceCollection';
-    public $amount;
-    public $doctorId;
-    public $contactId;
+    public $amount     = "";
+    public $doctorId   = "";
+    public $contactId  = "";
+    public $guid ;
 
-    public function createInvoice()
+    private function createInvoice()
     {
 
         $invoice_xml = $this->getXmlInvoice();
@@ -33,6 +34,33 @@ class Invoice extends BPM
         curl_close($curl);
 
         return $result;
+    }
+
+    private function updateInvoice(){
+        $url = URL.$this->collection."(guid'{$this->guid}')";
+        $invoice_xml = $this->getXmlInvoice();
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_USERPWD => 'Ahmed_Marzouk' . ":" .'Artorg123',
+            CURLOPT_CUSTOMREQUEST => 'MERGE',
+            CURLOPT_HTTPHEADER =>array('Content-Type:application/atom+xml;type=entry','Accept:application/atom+xml'),
+            CURLOPT_POSTFIELDS => $invoice_xml,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => $url
+
+        ));
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+    }
+
+    public function saveInvoice(){
+        $id_exists = self::checkId('InvoiceCollection',$this->guid);
+        if($id_exists){
+            $this->updateInvoice();
+        }else{
+            $this->createInvoice();
+        }
     }
 
     public function getXmlInvoice()

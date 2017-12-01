@@ -25,8 +25,19 @@ class BPM
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_URL => $baseUrl
         ));
+
         // save results to $resp :
         $resp = curl_exec($curl);
+
+        // save results to XML file :
+        $file = 'resultsFile.xml';
+        if ($handle = fopen($file, 'wt')) {
+            fwrite($handle, $resp);
+            fclose($handle);
+        } else {
+            echo "could not open the file";
+        }
+
         curl_close($curl);
         $resultArray = self::XMLtoArray($resp);
         return $resultArray;
@@ -105,11 +116,10 @@ class BPM
 
         $result = curl_exec($ch);
         curl_close($ch);
-        //echo "<pre>$result</pre>";
     }
 
     public function saveRecord(){
-        $id_exists = self::checkId($this->guid);
+        $id_exists = self::checkId($this->collection,$this->guid);
         if($id_exists){
             $this->updateRecord();
         }else{
@@ -137,10 +147,12 @@ class BPM
         echo "<pre>$result</pre>";
     }
 
-    public static function checkId($id)
+
+    public static function checkId($collection,$id)
     {
         // this function takes the id and search for the id in the recieved data
         // if the id exists it return TRUE if not it returns FALSE.
+        self::getRecords($collection);
         if (strlen($id) != 36) {
             return false;
         } else {
@@ -156,6 +168,7 @@ class BPM
             return $valid;
         }
     }
+
 
     public function getXml(){
         $contact_xml = '<?xml version="1.0" encoding="utf-8"?>

@@ -17,7 +17,7 @@ if(isset($_POST['name']) && isset($_POST['phone'])){
     }
     $contact->saveRecord();
 
-    header("Refresh: .2;url='http://bpmonline.loc'");
+    header("Refresh: .2;url='http://apptest.loc'");
 //    http://profi.artorg.com.ua/
 //    http://bpmonline.loc
 }
@@ -25,7 +25,7 @@ if(isset($_POST['name']) && isset($_POST['phone'])){
 if(isset($_GET['guid_delete'])){
     $guid = $_GET['guid_delete'];
     BPM::deleteRecord('ContactCollection',$guid);
-    header("Refresh: .2;url='http://bpmonline.loc'");
+    header("Refresh: .2;url='http://apptest.loc'");
 }
 
 ?>

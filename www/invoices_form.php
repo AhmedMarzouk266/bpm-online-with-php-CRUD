@@ -19,10 +19,10 @@ if (isset($_POST['number'])) {
         $invoice->guid = $guid;
     }
 
-    $invoice->createInvoice();
+    $invoice->saveInvoice();
 
     //refresh the page :
-    header("Refresh: .1;url='http://bpmonline.loc/test.php'");
+    header("Refresh: .1;url='http://bpmonline.loc/invoices_form.php'");
 }
 
 ?>
@@ -97,7 +97,7 @@ if (isset($_POST['number'])) {
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($invoicesData as $invoice) { ?>
+            <?php $i=1;foreach ($invoicesData as $invoice) { ?>
                 <tr>
                     <th scope="row"><?= $i ?></th>
                     <td><?=$invoice['number'] ?></td>
@@ -106,7 +106,7 @@ if (isset($_POST['number'])) {
                     <td><?=$invoice['doctor']?></td>
                     <td><?=$invoice['contact']?></td>
                 </tr>
-            <? } ?>
+            <? $i++; } ?>
             </tbody>
         </table>
 
