@@ -18,7 +18,7 @@ using cURL Library in PHP (http://php.net/curl).
 #installing:
 - it is supposed that php is on and running on your computer.
 - copy the directory /www to your php projects folder.
-- on the index.php file you can make your operations :
+- on the index.php file you can make your operations on contact collection:
 
 example of 'Reading' records from contact collection :
 
@@ -28,8 +28,9 @@ example of 'Reading' records from contact collection :
 
 - Note :
 
-getRecords() function does not return the records, it saves them in XML file 
+getRecords() function return the records and saves them to an XML file 
 called 'resultsFile.xml'.
+
 
 example of 'Creating' record to contact collection :
 
@@ -52,13 +53,8 @@ example of 'Deleting' record to contact collection :
     $contact2->guid ='00000000-0000-0000-0000-000000000000';
     BPM::deleteRecord('ContactCollection',$guid);
 
-- Project contents :
 
-/www:
-1- BPM.php : it is the main class that contains all the operations and some helper functions.
-2- config.php : contains the configuration system.
-3- resultsFile.xml : contains the results got back from the getRecords() function
-4- index.php : where you can make your operations.
+Note that : in the current project values are retrieved from a form.
 
 good luck !
 

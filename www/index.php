@@ -3,7 +3,7 @@
     require_once "config.php";
     $contentArray = BPM::getRecords('ContactCollection');
 
-    // form handling !
+    // contact form processing :
 if(isset($_POST['name']) && isset($_POST['phone'])){
     $name = $_POST['name'];
     $phone = $_POST['phone'];
@@ -18,8 +18,7 @@ if(isset($_POST['name']) && isset($_POST['phone'])){
     $contact->saveRecord();
 
     header("Refresh: .2;url='http://apptest.loc'");
-//    http://profi.artorg.com.ua/
-//    http://bpmonline.loc
+    // reload page for automatic add of contacts.
 }
 
 if(isset($_GET['guid_delete'])){

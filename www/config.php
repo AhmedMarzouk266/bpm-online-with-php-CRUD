@@ -1,8 +1,8 @@
 <?php
 
 // automatically load classes !
+
 spl_autoload_register(function($classname){
-// runs when you make a class
     $file_name = ROOT."/{$classname}.php";
     $file_name = str_replace('\\',"/",$file_name);
     if(file_exists($file_name)){
